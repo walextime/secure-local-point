@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - POS System</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .error { color: red; }
+        .success { color: green; }
+        .info { color: blue; }
+        pre { background: #f5f5f5; padding: 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>POS System Debug</h1>
+    <div id="status">Checking system status...</div>
+    <div id="logs"></div>
+
+    <script type="module">
+        const statusDiv = document.getElementById('status');
+        const logsDiv = document.getElementById('logs');
+
+        function log(message, type = 'info') {
+            const div = document.createElement('div');
+            div.className = type;
+            div.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
+            logsDiv.appendChild(div);
+        }
+
+        async function checkSystem() {
+            try {
+                log('Starting system check...');
+                
+                // Test IndexedDB
+                log('Testing IndexedDB...');
+                const dbName = 'pos_system';
+                const request = indexedDB.open(dbName, 8);
+                
+                request.onerror = () => {
+                    log('IndexedDB error: ' + request.error, 'error');
+                };
+                
+                request.onsuccess = () => {
+                    log('IndexedDB opened successfully', 'success');
+                    const db = request.result;
+                    log(`Database name: ${db.name}, version: ${db.version}`);
+                    log(`Object stores: ${Array.from(db.objectStoreNames).join(', ')}`);
+                    db.close();
+                };
+                
+                // Test if we can access the main app
+                log('Testing main app access...');
+                const response = await fetch('/');
+                if (response.ok) {
+                    log('Main app responds correctly', 'success');
+                } else {
+                    log(`Main app error: ${response.status}`, 'error');
+                }
+                
+                statusDiv.innerHTML = '<span class="success">System check completed. Check logs above.</span>';
+                
+            } catch (error) {
+                log(`System check failed: ${error.message}`, 'error');
+                statusDiv.innerHTML = '<span class="error">System check failed. Check logs above.</span>';
+            }
+        }
+
+        checkSystem();
+    </script>
+</body>
+</html> 

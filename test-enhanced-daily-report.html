@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enhanced Daily Report Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .report-section {
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #007bff;
+        }
+        .sales-section { border-left-color: #28a745; }
+        .expenses-section { border-left-color: #dc3545; }
+        .inventory-section { border-left-color: #ffc107; }
+        .operational-section { border-left-color: #17a2b8; }
+        .alerts-section { border-left-color: #fd7e14; }
+        .predictions-section { border-left-color: #6f42c1; }
+        .summary-section { border-left-color: #20c997; }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px 0;
+            padding: 8px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        .metric-label {
+            font-weight: bold;
+            color: #495057;
+        }
+        .metric-value {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .alert {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+        .prediction {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+        .highlight {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+        .priority {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover { background-color: #0056b3; }
+        .success-btn { background-color: #28a745; }
+        .success-btn:hover { background-color: #218838; }
+        .warning-btn { background-color: #ffc107; color: #212529; }
+        .warning-btn:hover { background-color: #e0a800; }
+        pre {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .emoji {
+            font-size: 1.2em;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Enhanced Daily Report Test</h1>
+        
+        <div class="report-section sales-section">
+            <h2><span class="emoji">📈</span>Sales & Revenue</h2>
+            <div class="metric">
+                <span class="metric-label">Total Revenue</span>
+                <span class="metric-value">$8,450.75</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Total Transactions</span>
+                <span class="metric-value">127</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Average Transaction Value</span>
+                <span class="metric-value">$66.54</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Revenue by Location</span>
+                <span class="metric-value">Main Store: $6,200 | Online: $2,250</span>
+            </div>
+        </div>
+
+        <div class="report-section expenses-section">
+            <h2><span class="emoji">💸</span>Expenses & Cash Flow</h2>
+            <div class="metric">
+                <span class="metric-label">Total Expenses</span>
+                <span class="metric-value">$5,070.45</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Net Cash Flow</span>
+                <span class="metric-value">$3,380.30</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Cash In</span>
+                <span class="metric-value">$8,450.75</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Cash Out</span>
+                <span class="metric-value">$5,070.45</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Expense Breakdown</span>
+                <span class="metric-value">COGS: $5,070 | Labor: $1,267 | Utilities: $845</span>
+            </div>
+        </div>
+
+        <div class="report-section inventory-section">
+            <h2><span class="emoji">📦</span>Inventory Snapshot</h2>
+            <div class="metric">
+                <span class="metric-label">Total Products</span>
+                <span class="metric-value">342</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Inventory Value</span>
+                <span class="metric-value">$45,230.00</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Low Stock Items</span>
+                <span class="metric-value">12 items</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Out of Stock Items</span>
+                <span class="metric-value">3 items</span>
+            </div>
+        </div>
+
+        <div class="report-section operational-section">
+            <h2><span class="emoji">📊</span>Operational Metrics</h2>
+            <div class="metric">
+                <span class="metric-label">Total Customers</span>
+                <span class="metric-value">89</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">New Customers</span>
+                <span class="metric-value">12</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Average Customer Value</span>
+                <span class="metric-value">$94.95</span>
+            </div>
+            <div class="metric">
+                <span class="metric-label">Top Selling Products</span>
+                <span class="metric-value">Product A: 45 units | Product B: 32 units</span>
+            </div>
+        </div>
+
+        <div class="report-section alerts-section">
+            <h2><span class="emoji">🚨</span>Alerts & Anomaly Signals</h2>
+            <div class="alert">
+                ⚠️ Low stock alert: 12 items need restocking
+            </div>
+            <div class="alert">
+                🚨 Out of stock alert: 3 items completely out of stock
+            </div>
+            <div class="alert">
+                📉 Unusual drop in revenue: 15% below average
+            </div>
+            <div class="alert">
+                💸 Cash flow concern: High expenses ratio
+            </div>
+        </div>
+
+        <div class="report-section predictions-section">
+            <h2><span class="emoji">🔮</span>Predictive Insights</h2>
+            <div class="prediction">
+                📈 Prediction: Tomorrow's revenue likely to be $7,600 - $8,400
+            </div>
+            <div class="prediction">
+                📦 Prediction: Need to reorder 15 items within 2-3 days
+            </div>
+            <div class="prediction">
+                💰 Prediction: Cash flow expected to remain positive
+            </div>
+            <div class="prediction">
+                👥 Prediction: High-value customers likely to return within 7 days
+            </div>
+        </div>
+
+        <div class="report-section summary-section">
+            <h2><span class="emoji">🧾</span>Summary Notes</h2>
+            <div class="highlight">
+                🎉 Excellent revenue performance: $8,450.75
+            </div>
+            <div class="highlight">
+                💎 High average transaction value: $66.54
+            </div>
+            <div class="highlight">
+                👥 Strong customer traffic: 89 unique customers
+            </div>
+            <div class="highlight">
+                💰 Positive cash flow: $3,380.30 net profit
+            </div>
+            
+            <h3>Next Day Priorities:</h3>
+            <div class="priority">
+                🚨 URGENT: Restock 3 out-of-stock items
+            </div>
+            <div class="priority">
+                📦 HIGH: Reorder 12 low-stock items
+            </div>
+            <div class="priority">
+                💰 MEDIUM: Review expenses and optimize cash flow
+            </div>
+        </div>
+
+        <h2>Actions</h2>
+        <button onclick="generateSampleReport()" class="success-btn">Generate Sample Report</button>
+        <button onclick="testSMSReport()" class="warning-btn">Test SMS Report</button>
+        
+        <h2>Generated Report</h2>
+        <pre id="reportOutput">Click "Generate Sample Report" to see the enhanced daily report...</pre>
+    </div>
+
+    <script>
+        function generateSampleReport() {
+            const report = `📊 ENHANCED DAILY REPORT - 2025-01-20
+Generated: 1/20/2025, 3:45:30 PM
+
+📈 SALES & REVENUE
+Total Revenue: $8,450.75
+Total Transactions: 127
+Average Transaction Value: $66.54
+Revenue by Location:
+  Main Store: $6,200.00
+  Online: $2,250.75
+
+💸 EXPENSES & CASH FLOW
+Total Expenses: $5,070.45
+Net Cash Flow: $3,380.30
+Cash In: $8,450.75
+Cash Out: $5,070.45
+
+📦 INVENTORY SNAPSHOT
+Total Products: 342
+Inventory Value: $45,230.00
+Low Stock Items: 12
+Out of Stock Items: 3
+
+📊 OPERATIONAL METRICS
+Total Customers: 89
+New Customers: 12
+Average Customer Value: $94.95
+
+🚨 ALERTS & ANOMALIES
+• ⚠️ Low stock alert: 12 items need restocking
+• 🚨 Out of stock alert: 3 items completely out of stock
+• 📉 Unusual drop in revenue: 15% below average
+• 💸 Cash flow concern: High expenses ratio
+
+🔮 PREDICTIVE INSIGHTS
+• 📈 Prediction: Tomorrow's revenue likely to be $7,600.00 - $8,400.00
+• 📦 Prediction: Need to reorder 15 items within 2-3 days
+• 💰 Prediction: Cash flow expected to remain positive
+• 👥 Prediction: High-value customers likely to return within 7 days
+
+🧾 SUMMARY & PRIORITIES
+Key Highlights:
+• 🎉 Excellent revenue performance: $8,450.75
+• 💎 High average transaction value: $66.54
+• 👥 Strong customer traffic: 89 unique customers
+• 💰 Positive cash flow: $3,380.30 net profit
+
+Next Day Priorities:
+• 🚨 URGENT: Restock 3 out-of-stock items
+• 📦 HIGH: Reorder 12 low-stock items
+• 💰 MEDIUM: Review expenses and optimize cash flow
+
+Manager Notes: Daily operations completed successfully. 4 positive highlights noted. 4 alerts require attention. Focus on restocking out-of-stock items for tomorrow.`;
+
+            document.getElementById('reportOutput').textContent = report;
+        }
+
+        function testSMSReport() {
+            const smsData = {
+                totalRevenue: 8450.75,
+                totalTransactions: 127,
+                totalCustomers: 89,
+                totalProducts: 342,
+                netCashFlow: 3380.30,
+                alerts: ['Low stock alert', 'Out of stock alert', 'Revenue drop', 'Cash flow concern']
+            };
+
+            const summarySMS = `📊 Daily Report: $8450.75 revenue, 127 transactions - 1/20/2025, 3:45:30 PM`;
+            
+            const detailedSMS = `📊 TechPlus POS Daily Report
+Date: 1/20/2025, 3:45:30 PM
+💰 Revenue: $8450.75
+📈 Transactions: 127
+👥 Customers: 89
+📦 Products: 342
+💸 Net Cash Flow: $3380.30
+🚨 Alerts: 4`;
+
+            const smsReport = `SMS Summary Format:\n${summarySMS}\n\nSMS Detailed Format:\n${detailedSMS}`;
+            
+            document.getElementById('reportOutput').textContent = smsReport;
+        }
+
+        // Generate sample report on page load
+        window.onload = function() {
+            generateSampleReport();
+        };
+    </script>
+</body>
+</html> 

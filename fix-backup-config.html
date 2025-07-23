@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fix Backup Configuration</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type="text"], input[type="email"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+        .error {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        .info {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .current-config {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Fix Backup Configuration</h1>
+        
+        <div class="info">
+            <h3>ℹ️ Problem</h3>
+            <p>Your app is using an incorrect Google Apps Script URL that's causing 401 errors. This tool will help you update the configuration with the correct working URL.</p>
+        </div>
+
+        <div class="current-config">
+            <h3>📋 Current Configuration</h3>
+            <div id="currentConfig">Loading...</div>
+        </div>
+
+        <h3>✅ Correct Configuration</h3>
+        <p>Use these values to fix your backup configuration:</p>
+
+        <div class="form-group">
+            <label for="scriptUrl">Google Apps Script URL:</label>
+            <input type="text" id="scriptUrl" value="https://script.google.com/macros/s/AKfycbzgLvYRn_H-0Z5uhSSF37sXhgVxNgYOutSJbXTETSnteG7ddSpL2KZX1ZMbalmISApI/exec" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="driveFolderId">Google Drive Folder ID:</label>
+            <input type="text" id="driveFolderId" value="1JcPf0LzShNZz1763I65KtFCP6HjJlGGR" readonly>
+        </div>
+
+        <div class="form-group">
+            <label for="emailDestination">Email Backup Destination:</label>
+            <input type="email" id="emailDestination" value="xavierfosso14@gmail.com" readonly>
+        </div>
+
+        <div class="form-group">
+            <button onclick="updateConfig()">🔄 Update Configuration</button>
+            <button onclick="testConnection()">🧪 Test Connection</button>
+            <button onclick="clearConfig()">🗑️ Clear Configuration</button>
+        </div>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function loadCurrentConfig() {
+            try {
+                const savedConfig = localStorage.getItem('backupUploadConfig');
+                if (savedConfig) {
+                    const config = JSON.parse(savedConfig);
+                    document.getElementById('currentConfig').innerHTML = `
+                        <strong>Script URL:</strong> ${config.scriptUrl || 'Not set'}<br>
+                        <strong>Folder ID:</strong> ${config.driveFolderId || 'Not set'}<br>
+                        <strong>Email:</strong> ${config.emailDestination || 'Not set'}
+                    `;
+                } else {
+                    document.getElementById('currentConfig').innerHTML = '<span class="error">No configuration found</span>';
+                }
+            } catch (error) {
+                document.getElementById('currentConfig').innerHTML = '<span class="error">Error loading configuration</span>';
+            }
+        }
+
+        function updateConfig() {
+            try {
+                const newConfig = {
+                    scriptUrl: document.getElementById('scriptUrl').value,
+                    driveFolderId: document.getElementById('driveFolderId').value,
+                    emailDestination: document.getElementById('emailDestination').value
+                };
+                
+                localStorage.setItem('backupUploadConfig', JSON.stringify(newConfig));
+                
+                document.getElementById('result').innerHTML = `
+                    <div class="success">
+                        ✅ Configuration updated successfully!<br>
+                        Please refresh your TechPlus POS app to apply the changes.
+                    </div>
+                `;
+                
+                loadCurrentConfig();
+            } catch (error) {
+                document.getElementById('result').innerHTML = `
+                    <div class="error">
+                        ❌ Error updating configuration: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        async function testConnection() {
+            try {
+                document.getElementById('result').innerHTML = '<div>🧪 Testing connection...</div>';
+                
+                const config = {
+                    scriptUrl: document.getElementById('scriptUrl').value,
+                    driveFolderId: document.getElementById('driveFolderId').value,
+                    emailDestination: document.getElementById('emailDestination').value
+                };
+                
+                const testData = {
+                    targetUrl: config.scriptUrl,
+                    action: 'test',
+                    test: 'true',
+                    driveFolderId: config.driveFolderId,
+                    emailDestination: config.emailDestination
+                };
+                
+                const response = await fetch('http://localhost:8888/proxy', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(testData)
+                });
+                
+                const responseText = await response.text();
+                
+                if (response.ok) {
+                    document.getElementById('result').innerHTML = `
+                        <div class="success">
+                            ✅ Connection test successful!<br>
+                            Response: ${responseText.substring(0, 200)}...
+                        </div>
+                    `;
+                } else {
+                    document.getElementById('result').innerHTML = `
+                        <div class="error">
+                            ❌ Connection test failed!<br>
+                            Status: ${response.status}<br>
+                            Response: ${responseText.substring(0, 200)}...
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                document.getElementById('result').innerHTML = `
+                    <div class="error">
+                        ❌ Connection test error: ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        function clearConfig() {
+            if (confirm('Are you sure you want to clear the backup configuration?')) {
+                localStorage.removeItem('backupUploadConfig');
+                document.getElementById('result').innerHTML = `
+                    <div class="success">
+                        ✅ Configuration cleared successfully!
+                    </div>
+                `;
+                loadCurrentConfig();
+            }
+        }
+
+        // Load current configuration on page load
+        loadCurrentConfig();
+    </script>
+</body>
+</html> 

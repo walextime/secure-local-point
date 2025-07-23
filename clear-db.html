@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clear Database - POS System</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .error { color: red; }
+        .success { color: green; }
+        .info { color: blue; }
+        button { padding: 10px 20px; margin: 10px; font-size: 16px; }
+        .danger { background: #ff4444; color: white; border: none; border-radius: 5px; }
+        .success-btn { background: #44ff44; color: black; border: none; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Clear Database - POS System</h1>
+    <p>This will clear all data and reset the application to initial state.</p>
+    
+    <button class="danger" onclick="clearDatabase()">Clear Database</button>
+    <button class="success-btn" onclick="window.location.href='/'">Go to Main App</button>
+    
+    <div id="status"></div>
+
+    <script>
+        async function clearDatabase() {
+            const statusDiv = document.getElementById('status');
+            statusDiv.innerHTML = '<span class="info">Clearing database...</span>';
+            
+            try {
+                // Delete the IndexedDB
+                const dbName = 'pos_system';
+                const request = indexedDB.deleteDatabase(dbName);
+                
+                request.onsuccess = () => {
+                    statusDiv.innerHTML = '<span class="success">Database cleared successfully! You can now go to the main app.</span>';
+                };
+                
+                request.onerror = () => {
+                    statusDiv.innerHTML = '<span class="error">Failed to clear database: ' + request.error + '</span>';
+                };
+                
+            } catch (error) {
+                statusDiv.innerHTML = '<span class="error">Error: ' + error.message + '</span>';
+            }
+        }
+    </script>
+</body>
+</html> 

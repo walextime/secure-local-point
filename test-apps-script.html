@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Google Apps Script Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        .result { margin: 10px 0; padding: 10px; background: #f5f5f5; }
+        .success { background: #d4edda; color: #155724; }
+        .error { background: #f8d7da; color: #721c24; }
+        input[type="text"] { width: 100%; padding: 8px; margin: 5px 0; }
+        button { padding: 10px 15px; margin: 5px; background: #007bff; color: white; border: none; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        .instructions { background: #e7f3ff; padding: 15px; border-radius: 5px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <h1>Google Apps Script Deployment Test</h1>
+    
+    <div class="instructions">
+        <h3>Instructions:</h3>
+        <ol>
+            <li>Make sure the test server is running: <code>node test-server.js</code></li>
+            <li>Enter your Apps Script URL below</li>
+            <li>Run the tests to verify deployment</li>
+        </ol>
+    </div>
+    
+    <div class="test-section">
+        <h2>1. Test Apps Script URL</h2>
+        <input type="text" id="scriptUrl" placeholder="https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec" style="width: 100%;">
+        <button onclick="testScriptUrl()">Test URL</button>
+        <div id="urlResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>2. Test GET Request (Direct)</h2>
+        <button onclick="testGetRequest()">Test GET Request</button>
+        <div id="getResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>3. Test POST Request (via Test Server)</h2>
+        <button onclick="testPostRequest()">Test POST Request</button>
+        <div id="postResult" class="result"></div>
+    </div>
+    
+    <div class="test-section">
+        <h2>4. Test Proxy Server (via Test Server)</h2>
+        <button onclick="testProxy()">Test Proxy</button>
+        <div id="proxyResult" class="result"></div>
+    </div>
+
+    <script>
+        function showResult(elementId, message, isSuccess = true) {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `result ${isSuccess ? 'success' : 'error'}`;
+        }
+
+        async function testScriptUrl() {
+            const url = document.getElementById('scriptUrl').value;
+            if (!url) {
+                showResult('urlResult', 'Please enter a script URL', false);
+                return;
+            }
+            
+            if (!url.startsWith('https://script.google.com/')) {
+                showResult('urlResult', 'Invalid URL format. Must start with https://script.google.com/', false);
+                return;
+            }
+            
+            if (!url.endsWith('/exec')) {
+                showResult('urlResult', 'Invalid URL format. Must end with /exec', false);
+                return;
+            }
+            
+            showResult('urlResult', 'URL format is valid ✓');
+        }
+
+        async function testGetRequest() {
+            const url = document.getElementById('scriptUrl').value;
+            if (!url) {
+                showResult('getResult', 'Please enter a script URL first', false);
+                return;
+            }
+            
+            try {
+                showResult('getResult', 'Testing GET request...');
+                const response = await fetch(url, { method: 'GET' });
+                const text = await response.text();
+                
+                if (response.ok) {
+                    showResult('getResult', `GET request successful ✓\nStatus: ${response.status}\nResponse: ${text.substring(0, 200)}...`);
+                } else {
+                    showResult('getResult', `GET request failed\nStatus: ${response.status}\nResponse: ${text}`, false);
+                }
+            } catch (error) {
+                showResult('getResult', `GET request error: ${error.message}`, false);
+            }
+        }
+
+        async function testPostRequest() {
+            const url = document.getElementById('scriptUrl').value;
+            if (!url) {
+                showResult('postResult', 'Please enter a script URL first', false);
+                return;
+            }
+            
+            try {
+                showResult('postResult', 'Testing POST request via test server...');
+                
+                const testData = {
+                    action: 'test',
+                    timestamp: new Date().toISOString()
+                };
+                
+                const response = await fetch('/test-apps-script', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        scriptUrl: url,
+                        testData: testData
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showResult('postResult', `POST request successful ✓\nStatus: ${result.status}\nResponse: ${result.response.substring(0, 200)}...`);
+                } else {
+                    showResult('postResult', `POST request failed\nStatus: ${result.status}\nResponse: ${result.response}`, false);
+                }
+            } catch (error) {
+                showResult('postResult', `POST request error: ${error.message}`, false);
+            }
+        }
+
+        async function testProxy() {
+            try {
+                showResult('proxyResult', 'Testing proxy server via test server...');
+                
+                const testData = {
+                    targetUrl: document.getElementById('scriptUrl').value || 'https://httpbin.org/post',
+                    action: 'test',
+                    timestamp: new Date().toISOString()
+                };
+                
+                const response = await fetch('/test-proxy', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        testData: testData
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showResult('proxyResult', `Proxy test successful ✓\nStatus: ${result.status}\nResponse: ${result.response.substring(0, 200)}...`);
+                } else {
+                    showResult('proxyResult', `Proxy test failed\nStatus: ${result.status}\nResponse: ${result.response}`, false);
+                }
+            } catch (error) {
+                showResult('proxyResult', `Proxy test error: ${error.message}`, false);
+            }
+        }
+    </script>
+</body>
+</html> 
