@@ -6,7 +6,12 @@ function getCloudBackupConfigWithFallback() {
   let config = {
     scriptUrl: '',
     driveFolderId: '',
-    emailDestination: ''
+    emailDestination: '',
+    smsProvider: '',
+    smsApiKey: '',
+    smsPhoneNumber: '',
+    smsEnabled: false,
+    smsFormat: 'summary' as const
   };
   const savedConfig = localStorage.getItem('backupUploadConfig');
   if (savedConfig) {

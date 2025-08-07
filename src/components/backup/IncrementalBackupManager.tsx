@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { backupRestoreLogic } from '@/services/backup/backupRestoreLogic';
-import { incrementalBackupDB, Workflow, WorkflowStep } from '@/lib/incrementalBackupSchema';
+import { incrementalBackupDB, Workflow as BackupWorkflow, WorkflowStep } from '@/lib/incrementalBackupSchema';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -27,7 +27,7 @@ import {
   Pause,
   RotateCcw,
   History,
-  Workflow,
+  Workflow as WorkflowIcon,
   Layers,
   GitBranch,
   GitCommit,
@@ -57,7 +57,7 @@ interface SnapshotMetadata {
 
 const IncrementalBackupManager: React.FC = () => {
   const [snapshots, setSnapshots] = useState<SnapshotMetadata[]>([]);
-  const [workflows, setWorkflows] = useState<Workflow[]>([]);
+  const [workflows, setWorkflows] = useState<BackupWorkflow[]>([]);
   const [isCreatingBackup, setIsCreatingBackup] = useState(false);
   const [isRestoring, setIsRestoring] = useState(false);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
@@ -70,7 +70,7 @@ const IncrementalBackupManager: React.FC = () => {
   // Load data
   const loadData = async () => {
     try {
-      const snapshotsData = await incrementalBackupDB.getSnapshots();
+      const snapshotsData = await incrementalBackupDB.snapshots.toArray();
       setSnapshots(snapshotsData);
 
       const workflowsData = await incrementalBackupDB.workflows.toArray();
@@ -274,7 +274,7 @@ const IncrementalBackupManager: React.FC = () => {
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
-              <Workflow className="h-5 w-5" />
+              <WorkflowIcon className="h-5 w-5" />
               <span>Active Workflows</span>
             </CardTitle>
             <CardDescription>
