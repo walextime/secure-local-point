@@ -6,7 +6,7 @@ import { AppSettings, StoreInfo } from '@/types/settings';
 import { BackupSettings } from '@/types/backup';
 import { useSettings } from '@/components/pos/hooks/useSettings';
 import { translations } from '@/components/settings/translations';
-import { restartBackupScheduler } from '@/services/backup/backupScheduler';
+// import { restartBackupScheduler } from '@/services/backup/backupScheduler';
 import SettingsHeader from '@/components/settings/SettingsHeader';
 import SettingsTabsList from '@/components/settings/SettingsTabsList';
 import StoreTab from '@/components/settings/tabs/StoreTab';
@@ -152,7 +152,8 @@ const Settings: React.FC = () => {
       await dbOperations.put(STORES.SETTINGS, backupSettingsObj);
       
       // Restart the backup scheduler with new settings
-      restartBackupScheduler();
+      // restartBackupScheduler();
+      console.log('Backup scheduler restart disabled during maintenance');
       
       toast.success('Backup settings saved and scheduler restarted');
     } catch (error) {

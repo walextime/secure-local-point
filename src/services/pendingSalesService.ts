@@ -409,7 +409,7 @@ export class PendingSalesService {
       await dbOperations.add(STORES.SALES, completedSale);
 
       
-      await CustomerAnalyticsService.updateCustomerAnalytics(pendingSale.customerId);
+      await CustomerAnalyticsService.updateCustomerAnalytics();
       
       
       

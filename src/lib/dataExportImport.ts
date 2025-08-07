@@ -68,7 +68,7 @@ export const exportAllData = async (): Promise<ExportData> => {
       partialPayments,
       userReceiptCounters,
       pendingSaleEvents,
-      actionQueue
+      actionQueue: actionQueue as unknown as Record<string, unknown>[],
     };
 
     console.log('Data export completed:', {

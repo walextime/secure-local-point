@@ -150,7 +150,7 @@ app.post('/api/backup-upload', async (req, res) => {
   }
 });
 
-const PORT = 8888;
+const PORT = 8889;
 app.listen(PORT, () => {
   console.log(`Proxy server running on port ${PORT}`);
 }); 

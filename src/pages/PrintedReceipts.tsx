@@ -336,7 +336,7 @@ const PrintedReceipts: React.FC = () => {
         </div>
         <DateRangePicker
           value={dateRange}
-          onChange={setDateRange}
+          onValueChange={setDateRange}
           placeholder={t.filterByDate}
         />
       </div>

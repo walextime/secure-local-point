@@ -6,7 +6,7 @@ import { Switch } from '@/components/ui/switch';
 import { Save, Download, AlertTriangle } from 'lucide-react';
 import { toast } from 'sonner';
 import { MasterPasswordService } from '@/services/security/masterPasswordService';
-import BackupUploader from '@/components/BackupUploader';
+// import BackupUploader from '@/components/BackupUploader';
 import { useAuth } from '@/hooks/useAuth';
 
 interface BackupSettingsProps {
@@ -128,8 +128,8 @@ const BackupSettings: React.FC<BackupSettingsProps> = ({
       <hr className="my-8" />
       {user?.role === 'root' && (
         <div>
-          <h3 className="text-md font-semibold mb-2">Cloud Backup Uploader</h3>
-          <BackupUploader />
+          <h3 className="text-md font-semibold mb-2">Cloud Backup</h3>
+          <p className="text-gray-600">Cloud backup features are being updated.</p>
         </div>
       )}
     </div>
